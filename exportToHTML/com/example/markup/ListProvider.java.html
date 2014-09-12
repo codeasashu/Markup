@@ -1,0 +1,144 @@
+<html>
+<head>
+<title>ListProvider.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { }
+.s2 { color: rgb(0,128,0); font-weight: bold; }
+.s3 { color: rgb(128,128,128); font-style: italic; }
+.s4 { color: rgb(0,0,255); }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+ListProvider.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<span class="s0">package </span><span class="s1">com.example.markup; 
+ 
+</span><span class="s0">import </span><span class="s1">java.util.ArrayList; 
+</span><span class="s0">import </span><span class="s1">java.util.List; 
+ 
+</span><span class="s0">import </span><span class="s1">com.example.markup.helper.DatabaseHelper; 
+</span><span class="s0">import </span><span class="s1">com.example.markup.model.MarkItem; 
+ 
+</span><span class="s0">import </span><span class="s1">android.appwidget.AppWidgetManager; 
+</span><span class="s0">import </span><span class="s1">android.content.Context; 
+</span><span class="s0">import </span><span class="s1">android.content.Intent; 
+</span><span class="s0">import </span><span class="s1">android.os.Bundle; 
+</span><span class="s0">import </span><span class="s1">android.widget.ImageButton; 
+</span><span class="s0">import </span><span class="s1">android.widget.RemoteViews; 
+</span><span class="s0">import </span><span class="s1">android.widget.Toast; 
+</span><span class="s0">import </span><span class="s1">android.widget.RemoteViewsService.RemoteViewsFactory; 
+ 
+</span><span class="s0">public class </span><span class="s1">ListProvider </span><span class="s0">implements </span><span class="s1">RemoteViewsFactory { 
+    </span><span class="s0">private </span><span class="s1">ArrayList&lt;ListItem&gt; listItemList = </span><span class="s0">new </span><span class="s1">ArrayList&lt;ListItem&gt;(); 
+    </span><span class="s0">private </span><span class="s1">Context context = </span><span class="s0">null</span><span class="s1">; 
+    </span><span class="s0">private </span><span class="s1">Intent remoteIntent; 
+    </span><span class="s0">private int </span><span class="s1">appWidgetId; 
+ 
+    DatabaseHelper db; 
+     
+    </span><span class="s0">public </span><span class="s1">ListProvider(Context context, Intent intent) { 
+        </span><span class="s0">this</span><span class="s1">.context = context; 
+        </span><span class="s0">this</span><span class="s1">.remoteIntent = intent; 
+         
+        appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 
+                AppWidgetManager.INVALID_APPWIDGET_ID); 
+        populateListItem(); 
+    } 
+ 
+    </span><span class="s0">private void </span><span class="s1">populateListItem() { 
+        db = </span><span class="s0">new </span><span class="s1">DatabaseHelper(</span><span class="s0">this</span><span class="s1">.context); 
+        List&lt;MarkItem&gt; contacts = db.getAllItems();    
+        </span><span class="s0">for </span><span class="s1">(MarkItem cn : contacts) { 
+            ListItem listItem = </span><span class="s0">new </span><span class="s1">ListItem(); 
+            listItem.itemid = cn.getID(); 
+            listItem.heading = cn.getItemName(); 
+            listItem.content = cn.getID() 
+                    + </span><span class="s2">&quot; Price: &quot;</span><span class="s1">+cn.getItemPrice(); 
+            listItemList.add(listItem); 
+        } 
+          
+    } 
+ 
+    @Override 
+    </span><span class="s0">public int </span><span class="s1">getCount() { 
+        </span><span class="s0">return </span><span class="s1">listItemList.size(); 
+    } 
+ 
+    @Override 
+    </span><span class="s0">public long </span><span class="s1">getItemId(</span><span class="s0">int </span><span class="s1">position) { 
+        </span><span class="s0">return </span><span class="s1">position; 
+    } 
+ 
+    </span><span class="s3">/* 
+     *Similar to getView of Adapter where instead of View 
+     *we return RemoteViews  
+     *  
+     */</span><span class="s1"> 
+    @Override 
+    </span><span class="s0">public </span><span class="s1">RemoteViews getViewAt(</span><span class="s0">int </span><span class="s1">position) { 
+        </span><span class="s0">final </span><span class="s1">RemoteViews remoteView = </span><span class="s0">new </span><span class="s1">RemoteViews( 
+                context.getPackageName(), R.layout.list_row); 
+        ListItem listItem = listItemList.get(position); 
+        remoteView.setTextViewText(R.id.heading, listItem.heading); 
+        remoteView.setTextViewText(R.id.content, listItem.content); 
+        </span><span class="s0">if</span><span class="s1">(position == </span><span class="s4">1</span><span class="s1">){ 
+            remoteView.setBoolean(R.id.buttonwidget, </span><span class="s2">&quot;setEnabled&quot;</span><span class="s1">, </span><span class="s0">false</span><span class="s1">); 
+        } 
+         
+         
+        Intent fillInIntent = </span><span class="s0">new </span><span class="s1">Intent(); 
+        fillInIntent.putExtra(WidgetProvider.BROADCAST_BTN_COMPLETE, </span><span class="s4">1</span><span class="s1">); 
+        fillInIntent.putExtra(WidgetProvider.EXTRA_ITEM, position); 
+        fillInIntent.putExtra(WidgetProvider.ITEM_ID, listItem.itemid); 
+        remoteView.setOnClickFillInIntent(R.id.buttonwidget, fillInIntent); 
+         
+        Intent fillInIntentb = </span><span class="s0">new </span><span class="s1">Intent(); 
+        fillInIntentb.putExtra(WidgetProvider.BROADCAST_BTN_COMPLETE, </span><span class="s4">0</span><span class="s1">); 
+        fillInIntentb.putExtra(WidgetProvider.EXTRA_ITEM, position); 
+        fillInIntentb.putExtra(WidgetProvider.ITEM_ID, listItem.itemid); 
+        remoteView.setOnClickFillInIntent(R.id.buttonwidgetb, fillInIntentb); 
+         
+        </span><span class="s0">return </span><span class="s1">remoteView; 
+    } 
+     
+ 
+    @Override 
+    </span><span class="s0">public </span><span class="s1">RemoteViews getLoadingView() { 
+        </span><span class="s0">return null</span><span class="s1">; 
+    } 
+ 
+    @Override 
+    </span><span class="s0">public int </span><span class="s1">getViewTypeCount() { 
+        </span><span class="s0">return </span><span class="s4">1</span><span class="s1">; 
+    } 
+ 
+    @Override 
+    </span><span class="s0">public boolean </span><span class="s1">hasStableIds() { 
+        </span><span class="s0">return true</span><span class="s1">; 
+    } 
+ 
+    @Override 
+    </span><span class="s0">public void </span><span class="s1">onCreate() { 
+    } 
+ 
+    @Override 
+    </span><span class="s0">public void </span><span class="s1">onDataSetChanged() { 
+     
+    } 
+ 
+    @Override 
+    </span><span class="s0">public void </span><span class="s1">onDestroy() { 
+    } 
+ 
+} 
+</span></pre>
+</body>
+</html>

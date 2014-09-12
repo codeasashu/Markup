@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="C:\Users\Ashutosh\Documents\Android-studio\Markup\markup\build\intermediates\pre-dexed\debug\internal_impl-20.0.0-2382790fa0254544307a6b60f413a318813148ea.jar"
+        jar="C:\Users\Ashutosh\Documents\Android-studio\Markup\markup\build\intermediates\exploded-aar\com.android.support\support-v4\20.0.0\libs\internal_impl-20.0.0.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="e40b3078e3fbd353c9f44da8df25a8fc0078209d"/>
+    <item
+        dex="C:\Users\Ashutosh\Documents\Android-studio\Markup\markup\build\intermediates\pre-dexed\debug\support-annotations-20.0.0-79e42da7c2657068d681cf877be8b4cc06e3cb7a.jar"
+        jar="C:\Program Files (x86)\Android\android-studio\sdk\extras\android\m2repository\com\android\support\support-annotations\20.0.0\support-annotations-20.0.0.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="9d9013e9ff35fc3756411e62873c363c70c638fa"/>
+    <item
+        dex="C:\Users\Ashutosh\Documents\Android-studio\Markup\markup\build\intermediates\pre-dexed\debug\classes-6aad4d0f9ad781aaf71f0e9353d9f0fe3963a9c9.jar"
+        jar="C:\Users\Ashutosh\Documents\Android-studio\Markup\markup\build\intermediates\exploded-aar\Markup\library\unspecified\classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="8feadd42b5763f535bdf29215ca67aefc540e1c5"/>
+    <item
+        dex="C:\Users\Ashutosh\Documents\Android-studio\Markup\markup\build\intermediates\pre-dexed\debug\classes-9c8539cdd55fb1cf2355f724e6373b2964dc0023.jar"
+        jar="C:\Users\Ashutosh\Documents\Android-studio\Markup\markup\build\intermediates\exploded-aar\com.android.support\support-v4\20.0.0\classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="8694693636ab36910c8100ce527c258ff3ebece0"/>
+    <item
+        dex="C:\Users\Ashutosh\Documents\Android-studio\Markup\markup\build\intermediates\pre-dexed\debug\internal_impl-20.0.0-cbd1ff86533c14ef8e0bb0612e062968833be8f9.jar"
+        jar="C:\Users\Ashutosh\Documents\Android-studio\Markup\markup\build\intermediates\exploded-aar\com.android.support\support-v13\20.0.0\libs\internal_impl-20.0.0.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="27bbd3982cdfe4468a9bf99c8c773734a9049e33"/>
+    <item
+        dex="C:\Users\Ashutosh\Documents\Android-studio\Markup\markup\build\intermediates\pre-dexed\debug\classes-71c944fc4246295201261d4c77ba733cf72af417.jar"
+        jar="C:\Users\Ashutosh\Documents\Android-studio\Markup\markup\build\intermediates\exploded-aar\com.android.support\support-v13\20.0.0\classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="e128103d5281ddd26195a7f980b36d0d005a4e56"/>
+
+</pre-dex-items>

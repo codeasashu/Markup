@@ -1,0 +1,82 @@
+<html>
+<head>
+<title>ItemOnSelect.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { }
+.s2 { color: rgb(128,128,128); font-style: italic; }
+.s3 { color: rgb(0,0,255); }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+ItemOnSelect.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<span class="s0">package </span><span class="s1">com.example.markup; 
+ 
+</span><span class="s0">import </span><span class="s1">java.util.Calendar; 
+</span><span class="s0">import </span><span class="s1">java.util.Date; 
+ 
+</span><span class="s0">import </span><span class="s1">com.example.markup.helper.DatabaseHelper; 
+</span><span class="s0">import </span><span class="s1">com.example.markup.model.MarkItem; 
+</span><span class="s0">import </span><span class="s1">com.squareup.timessquare.CalendarPickerView; 
+</span><span class="s0">import </span><span class="s1">com.squareup.timessquare.CalendarPickerView.SelectionMode; 
+ 
+</span><span class="s0">import </span><span class="s1">android.app.Activity; 
+</span><span class="s0">import </span><span class="s1">android.content.Intent; 
+</span><span class="s0">import </span><span class="s1">android.os.Bundle; 
+ 
+</span><span class="s0">public class </span><span class="s1">ItemOnSelect </span><span class="s0">extends </span><span class="s1">Activity{ 
+     
+    </span><span class="s0">private </span><span class="s1">String ITEM_NAME; 
+    </span><span class="s0">private </span><span class="s1">CalendarPickerView calendar; 
+    DatabaseHelper db; 
+ 
+    @Override 
+    </span><span class="s0">protected void </span><span class="s1">onCreate(Bundle savedInstanceState) { 
+        </span><span class="s2">// TODO Auto-generated method stub</span><span class="s1"> 
+        </span><span class="s0">super</span><span class="s1">.onCreate(savedInstanceState); 
+        setContentView(R.layout.item_select); 
+        </span><span class="s2">//Calender view</span><span class="s1"> 
+        </span><span class="s0">final </span><span class="s1">Calendar nextYear = Calendar.getInstance(); 
+        nextYear.add(Calendar.YEAR, </span><span class="s3">1</span><span class="s1">); 
+ 
+        </span><span class="s0">final </span><span class="s1">Calendar lastYear = Calendar.getInstance(); 
+        lastYear.add(Calendar.YEAR, -</span><span class="s3">1</span><span class="s1">); 
+ 
+        calendar = (CalendarPickerView) findViewById(R.id.calendar_viewb); 
+        calendar.init(lastYear.getTime(), nextYear.getTime()) </span><span class="s2">//</span><span class="s1"> 
+            .inMode(SelectionMode.SINGLE) </span><span class="s2">//</span><span class="s1"> 
+            .withSelectedDate(</span><span class="s0">new </span><span class="s1">Date()); 
+         
+        db = </span><span class="s0">new </span><span class="s1">DatabaseHelper(getApplicationContext()); 
+        Intent intent = getIntent(); 
+        </span><span class="s0">int </span><span class="s1">item_id =  intent.getIntExtra(AnimalListActivity.ITEM_ID,</span><span class="s3">0</span><span class="s1">); 
+        ITEM_NAME = getItemName(item_id); 
+    </span><span class="s2">//  setActionBar(String.valueOf(item_id));</span><span class="s1"> 
+        setTitle(ITEM_NAME); 
+         
+         
+    } 
+     
+    </span><span class="s0">private </span><span class="s1">String getItemName(</span><span class="s0">int </span><span class="s1">item_id) { 
+        </span><span class="s2">// TODO Auto-generated method stub</span><span class="s1"> 
+        MarkItem itemname = db.getItem(item_id); 
+        </span><span class="s0">return </span><span class="s1">itemname.getItemName(); 
+    } 
+ 
+    </span><span class="s0">public void </span><span class="s1">setActionBar(MarkItem iTEM_NAME2) { 
+        </span><span class="s2">// TODO Auto-generated method stub</span><span class="s1"> 
+        setTitle((CharSequence) iTEM_NAME2); 
+    } 
+ 
+} 
+</span></pre>
+</body>
+</html>

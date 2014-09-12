@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@drawable/big_card"
+    android:padding="@dimen/widget_margin"
+    android:paddingBottom="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp"
+    android:scrollbars="vertical" >
+
+    
+
+    
+    <TextView
+        android:id="@+id/heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:singleLine="true"
+        android:textSize="14sp"
+        android:textStyle="bold" 
+        android:text="Heading"/>
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/heading"
+        android:layout_marginTop="5dip"
+        android:textSize="14sp" 
+        android:text="Content"/>
+
+ 	<ImageButton
+ 	    android:id="@+id/buttonwidget"
+ 	    android:layout_width="wrap_content"
+ 	    android:layout_height="wrap_content"
+ 	    android:layout_alignParentRight="true"
+ 	    android:layout_alignTop="@+id/buttonwidgetb"
+ 	    android:layout_marginRight="81dp"
+ 	    android:contentDescription="EmptyText"
+ 	    android:src="@android:drawable/ic_menu_delete" />
+
+ 	<ImageButton
+ 	    android:id="@+id/buttonwidgetb"
+ 	    android:layout_width="wrap_content"
+ 	    android:layout_height="wrap_content"
+ 	    android:layout_alignParentRight="true"
+ 	    android:layout_alignTop="@+id/heading"
+ 	    android:layout_marginRight="22dp"
+ 	    android:contentDescription="EmptyText"
+ 	    android:src="@android:drawable/ic_menu_delete" />
+
+</RelativeLayout>

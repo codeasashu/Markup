@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent" 
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_marginTop="80dp"
+        android:gravity="center_horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Populating ListView with ArrayList Example"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+       android:id="@+id/butttonShowAnimal"
+        android:layout_marginTop="25dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Show Animals List" 
+        />
+    <Button
+       android:id="@+id/butttonShowCalender"
+        android:layout_marginTop="25dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Show Sample Calender" 
+        />
+
+    <Button
+        android:id="@+id/butttonShowWeek"
+        android:layout_marginTop="25dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Show Week"
+        />
+
+    <Button
+        android:id="@+id/butttonShowCal"
+        android:layout_marginTop="25dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Show Calender"
+        />
+    
+
+</LinearLayout>

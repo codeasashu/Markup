@@ -1,0 +1,43 @@
+<html>
+<head>
+<title>WidgetService.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { }
+.s2 { color: rgb(128,128,128); font-style: italic; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+WidgetService.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<span class="s0">package </span><span class="s1">com.example.markup; 
+ 
+</span><span class="s0">import </span><span class="s1">android.appwidget.AppWidgetManager; 
+</span><span class="s0">import </span><span class="s1">android.content.Intent; 
+</span><span class="s0">import </span><span class="s1">android.widget.RemoteViewsService; 
+</span><span class="s0">import </span><span class="s1">android.widget.Toast; 
+ 
+</span><span class="s0">public class </span><span class="s1">WidgetService </span><span class="s0">extends </span><span class="s1">RemoteViewsService { 
+ 
+    @Override 
+    </span><span class="s0">public </span><span class="s1">RemoteViewsFactory onGetViewFactory(Intent intent) { 
+        </span><span class="s2">// TODO Auto-generated method stub</span><span class="s1"> 
+        </span><span class="s0">int </span><span class="s1">appWidgetId = intent.getIntExtra( 
+                AppWidgetManager.EXTRA_APPWIDGET_ID, 
+                AppWidgetManager.INVALID_APPWIDGET_ID); 
+         
+        </span><span class="s0">return </span><span class="s1">(</span><span class="s0">new </span><span class="s1">ListProvider(</span><span class="s0">this</span><span class="s1">.getApplicationContext(), intent)); 
+    } 
+ 
+     
+} 
+</span></pre>
+</body>
+</html>

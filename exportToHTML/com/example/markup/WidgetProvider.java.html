@@ -1,0 +1,142 @@
+<html>
+<head>
+<title>WidgetProvider.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { }
+.s2 { color: rgb(0,128,0); font-weight: bold; }
+.s3 { color: rgb(128,128,128); font-style: italic; }
+.s4 { color: rgb(0,0,255); }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+WidgetProvider.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<span class="s0">package </span><span class="s1">com.example.markup; 
+ 
+</span><span class="s0">import </span><span class="s1">android.app.PendingIntent; 
+</span><span class="s0">import </span><span class="s1">android.appwidget.AppWidgetManager; 
+</span><span class="s0">import </span><span class="s1">android.appwidget.AppWidgetProvider; 
+</span><span class="s0">import </span><span class="s1">android.content.ComponentName; 
+</span><span class="s0">import </span><span class="s1">android.content.Context; 
+</span><span class="s0">import </span><span class="s1">android.content.Intent; 
+</span><span class="s0">import </span><span class="s1">android.net.Uri; 
+</span><span class="s0">import </span><span class="s1">android.view.LayoutInflater; 
+</span><span class="s0">import </span><span class="s1">android.view.View; 
+</span><span class="s0">import </span><span class="s1">android.view.ViewGroup; 
+</span><span class="s0">import </span><span class="s1">android.widget.ImageButton; 
+</span><span class="s0">import </span><span class="s1">android.widget.RemoteViews; 
+</span><span class="s0">import </span><span class="s1">android.widget.TextView; 
+</span><span class="s0">import </span><span class="s1">android.widget.Toast; 
+ 
+</span><span class="s0">public class </span><span class="s1">WidgetProvider </span><span class="s0">extends </span><span class="s1">AppWidgetProvider { 
+ 
+    </span><span class="s0">private static final </span><span class="s1">String MyOnClick = </span><span class="s2">&quot;myOnClickTag&quot;</span><span class="s1">; 
+    </span><span class="s0">private </span><span class="s1">Context con; 
+     
+    </span><span class="s0">public static final </span><span class="s1">String ITEM_ID = </span><span class="s2">&quot;0&quot;</span><span class="s1">; 
+    </span><span class="s0">public static final </span><span class="s1">String APPWIDGET_ID = </span><span class="s2">&quot;0&quot;</span><span class="s1">; 
+    </span><span class="s0">public static final </span><span class="s1">String ACTION_START_ACTIVITY = </span><span class="s2">&quot;startActivity&quot;</span><span class="s1">; 
+    </span><span class="s0">public static final </span><span class="s1">String BROADCAST_BTN_COMPLETE = </span><span class="s2">&quot;completeintentId&quot;</span><span class="s1">; 
+    </span><span class="s0">public static final </span><span class="s1">String BROADCAST_PARAM_PACKAGE_NAME = </span><span class="s2">&quot;intentPackage&quot;</span><span class="s1">; 
+    </span><span class="s0">public static final </span><span class="s1">String BROADCAST_PARAM_CLASS_NAME = </span><span class="s2">&quot;intentClassName&quot;</span><span class="s1">; 
+     
+    </span><span class="s0">public static final </span><span class="s1">String TOAST_ACTION = </span><span class="s2">&quot;com.example.android.stackwidget.TOAST_ACTION&quot;</span><span class="s1">; 
+    </span><span class="s0">public static final </span><span class="s1">String EXTRA_ITEM = </span><span class="s2">&quot;com.example.android.stackwidget.EXTRA_ITEM&quot;</span><span class="s1">; 
+     
+ 
+    @Override 
+    </span><span class="s0">public void </span><span class="s1">onUpdate(Context context, AppWidgetManager appWidgetManager, 
+            </span><span class="s0">int</span><span class="s1">[] appWidgetIds) { 
+        </span><span class="s3">// TODO Auto-generated method stub</span><span class="s1"> 
+        </span><span class="s0">final int </span><span class="s1">N = appWidgetIds.length; 
+        </span><span class="s3">/*int[] appWidgetIds holds ids of multiple instance of your widget 
+         * meaning you are placing more than one widgets on your homescreen*/</span><span class="s1"> 
+        </span><span class="s0">for </span><span class="s1">(</span><span class="s0">int </span><span class="s1">i = </span><span class="s4">0</span><span class="s1">; i &lt; N; ++i) { 
+            RemoteViews remoteViews = updateWidgetListView(context, 
+                    appWidgetIds[i]); 
+             
+            </span><span class="s3">//Launching MainActivity </span><span class="s1"> 
+            Intent clickIntent = </span><span class="s0">new </span><span class="s1">Intent(context, WidgetProvider.</span><span class="s0">class</span><span class="s1">); 
+            clickIntent.setAction(ACTION_START_ACTIVITY); 
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, </span><span class="s4">0</span><span class="s1">, clickIntent, </span><span class="s4">0</span><span class="s1">); 
+            remoteViews.setPendingIntentTemplate(R.id.listViewWidget, pendingIntent); 
+             
+            </span><span class="s3">/* 
+            clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]); 
+            clickIntent.setData(Uri.parse(clickIntent.toUri(Intent.URI_INTENT_SCHEME))); 
+            PendingIntent clickPI = PendingIntent.getActivity(context, 0, 
+                    clickIntent, PendingIntent.FLAG_UPDATE_CURRENT); 
+            remoteViews.setPendingIntentTemplate(com.example.markup.R.id.listViewWidget, clickPI);       
+            */</span><span class="s1"> 
+            </span><span class="s3">//Launching Add Activity</span><span class="s1"> 
+            Intent addmark = </span><span class="s0">new </span><span class="s1">Intent(context, AddMark.</span><span class="s0">class</span><span class="s1">); 
+            PendingIntent clickAdd = PendingIntent.getActivity(context, </span><span class="s4">0</span><span class="s1">, 
+                    addmark, PendingIntent.FLAG_UPDATE_CURRENT); 
+            remoteViews.setOnClickPendingIntent(R.id.ib, clickAdd); 
+             
+            appWidgetManager.updateAppWidget(appWidgetIds[i], remoteViews); 
+        } 
+        con = context; 
+        </span><span class="s0">super</span><span class="s1">.onUpdate(context, appWidgetManager, appWidgetIds); 
+    </span><span class="s3">//  Toast.makeText(context, &quot;Widget Button Clicked&quot;,   Toast.LENGTH_SHORT).show();</span><span class="s1"> 
+    } 
+     
+     
+    @Override 
+    </span><span class="s0">public void </span><span class="s1">onReceive(Context context, Intent intent) { 
+        </span><span class="s3">// TODO Auto-generated method stub</span><span class="s1"> 
+        </span><span class="s3">/* 
+        if(WidgetProvider.ACTION_START_ACTIVITY.equals(intent.getAction())) { 
+            int btn_type = intent.getIntExtra(WidgetProvider.BROADCAST_BTN_COMPLETE,0); 
+            int position = intent.getIntExtra(WidgetProvider.EXTRA_ITEM,0); 
+            int item_id =  intent.getIntExtra(WidgetProvider.ITEM_ID,0); 
+             
+            if(btn_type == 1) 
+            { 
+                Toast.makeText(context, &quot;Widget Complete Button Clicked: &quot;+item_id,   Toast.LENGTH_SHORT).show(); 
+            }else if(btn_type == 0){ 
+                Toast.makeText(context, &quot;Widget InComplete Button Clicked: &quot;+item_id,   Toast.LENGTH_SHORT).show(); 
+            } 
+             
+        } 
+        */</span><span class="s1"> 
+         
+        </span><span class="s0">super</span><span class="s1">.onReceive(context, intent); 
+    } 
+ 
+     
+ 
+    @SuppressWarnings(</span><span class="s2">&quot;deprecation&quot;</span><span class="s1">) 
+    </span><span class="s0">private </span><span class="s1">RemoteViews updateWidgetListView(Context context, </span><span class="s0">int </span><span class="s1">appWidgetId) { 
+ 
+        </span><span class="s3">//which layout to show on widget</span><span class="s1"> 
+        RemoteViews remoteViews = </span><span class="s0">new </span><span class="s1">RemoteViews(context.getPackageName(), 
+                R.layout.widget_layout); 
+         
+        </span><span class="s3">//RemoteViews Service needed to provide adapter for ListView</span><span class="s1"> 
+        Intent svcIntent = </span><span class="s0">new </span><span class="s1">Intent(context, WidgetService.</span><span class="s0">class</span><span class="s1">); 
+        </span><span class="s3">//passing app widget id to that RemoteViews Service</span><span class="s1"> 
+        svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId); 
+        </span><span class="s3">//setting a unique Uri to the intent</span><span class="s1"> 
+        </span><span class="s3">//don't know its purpose to me right now</span><span class="s1"> 
+        svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME))); 
+        </span><span class="s3">//setting adapter to listview of the widget</span><span class="s1"> 
+        remoteViews.setRemoteAdapter(appWidgetId, R.id.listViewWidget, 
+                svcIntent); 
+        </span><span class="s3">//setting an empty view in case of no data</span><span class="s1"> 
+        remoteViews.setEmptyView(R.id.listViewWidget, R.id.empty_view);       
+        </span><span class="s0">return </span><span class="s1">remoteViews; 
+    } 
+ 
+} 
+</span></pre>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<html>
+<head>
+<title>MarkItem.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { }
+.s2 { color: rgb(128,128,128); font-style: italic; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+MarkItem.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<span class="s0">package </span><span class="s1">com.example.markup.model; 
+ 
+</span><span class="s0">public class </span><span class="s1">MarkItem { 
+ 
+    </span><span class="s2">//private variables</span><span class="s1"> 
+    </span><span class="s0">int </span><span class="s1">_id; 
+    String _name; 
+    String _price; 
+    String _created_at; 
+      
+    </span><span class="s2">// Empty constructor</span><span class="s1"> 
+    </span><span class="s0">public </span><span class="s1">MarkItem(){ 
+          
+    } 
+    </span><span class="s2">// constructor</span><span class="s1"> 
+    </span><span class="s0">public </span><span class="s1">MarkItem(</span><span class="s0">int </span><span class="s1">id, String name, String _price){ 
+        </span><span class="s0">this</span><span class="s1">._id = id; 
+        </span><span class="s0">this</span><span class="s1">._name = name; 
+        </span><span class="s0">this</span><span class="s1">._price = _price; 
+    } 
+      
+    </span><span class="s2">// constructor</span><span class="s1"> 
+    </span><span class="s0">public </span><span class="s1">MarkItem(String name, String _price){ 
+        </span><span class="s0">this</span><span class="s1">._name = name; 
+        </span><span class="s0">this</span><span class="s1">._price = _price; 
+    } 
+     
+ 
+     
+    </span><span class="s2">// getting ID</span><span class="s1"> 
+    </span><span class="s0">public int </span><span class="s1">getID(){ 
+        </span><span class="s0">return this</span><span class="s1">._id; 
+    } 
+      
+    </span><span class="s2">// setting id</span><span class="s1"> 
+    </span><span class="s0">public void </span><span class="s1">setID(</span><span class="s0">int </span><span class="s1">id){ 
+        </span><span class="s0">this</span><span class="s1">._id = id; 
+    } 
+      
+    </span><span class="s2">// getting item name</span><span class="s1"> 
+    </span><span class="s0">public </span><span class="s1">String getItemName(){ 
+        </span><span class="s0">return this</span><span class="s1">._name; 
+    } 
+      
+    </span><span class="s2">// setting item name</span><span class="s1"> 
+    </span><span class="s0">public void </span><span class="s1">setName(String name){ 
+        </span><span class="s0">this</span><span class="s1">._name = name; 
+    } 
+      
+    </span><span class="s2">// getting item price</span><span class="s1"> 
+    </span><span class="s0">public </span><span class="s1">String getItemPrice(){ 
+        </span><span class="s0">return this</span><span class="s1">._price; 
+    } 
+      
+    </span><span class="s2">// setting item price</span><span class="s1"> 
+    </span><span class="s0">public void </span><span class="s1">setPrice(String _price){ 
+        </span><span class="s0">this</span><span class="s1">._price = _price; 
+    } 
+     
+ </span><span class="s2">// getting item creation date</span><span class="s1"> 
+    </span><span class="s0">public </span><span class="s1">String getItemCreatedAt(){ 
+        </span><span class="s0">return this</span><span class="s1">._created_at; 
+    } 
+    </span><span class="s0">public void </span><span class="s1">setItemCreatedAt( String created_at ){ 
+        </span><span class="s0">this</span><span class="s1">._created_at = created_at; 
+    } 
+} 
+ 
+ 
+</span></pre>
+</body>
+</html>

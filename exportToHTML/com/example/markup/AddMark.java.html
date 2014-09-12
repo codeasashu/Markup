@@ -1,0 +1,115 @@
+<html>
+<head>
+<title>AddMark.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { }
+.s2 { color: rgb(128,128,128); font-style: italic; }
+.s3 { color: rgb(0,128,0); font-weight: bold; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+AddMark.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<span class="s0">package </span><span class="s1">com.example.markup; 
+ 
+</span><span class="s0">import </span><span class="s1">java.util.ArrayList; 
+</span><span class="s0">import </span><span class="s1">java.util.List; 
+ 
+</span><span class="s0">import </span><span class="s1">com.example.markup.helper.DatabaseHelper; 
+</span><span class="s0">import </span><span class="s1">com.example.markup.model.MarkItem; 
+ 
+</span><span class="s0">import </span><span class="s1">android.app.Activity; 
+</span><span class="s0">import </span><span class="s1">android.appwidget.AppWidgetManager; 
+</span><span class="s0">import </span><span class="s1">android.content.ComponentName; 
+</span><span class="s0">import </span><span class="s1">android.content.ContentValues; 
+</span><span class="s0">import </span><span class="s1">android.content.DialogInterface; 
+</span><span class="s0">import </span><span class="s1">android.content.Intent; 
+</span><span class="s0">import </span><span class="s1">android.database.sqlite.SQLiteDatabase; 
+</span><span class="s0">import </span><span class="s1">android.os.Bundle; 
+</span><span class="s0">import </span><span class="s1">android.util.Log; 
+</span><span class="s0">import </span><span class="s1">android.view.View; 
+</span><span class="s0">import </span><span class="s1">android.view.View.OnClickListener; 
+</span><span class="s0">import </span><span class="s1">android.widget.Button; 
+</span><span class="s0">import </span><span class="s1">android.widget.EditText; 
+</span><span class="s0">import </span><span class="s1">android.widget.Toast; 
+ 
+</span><span class="s0">public class </span><span class="s1">AddMark </span><span class="s0">extends </span><span class="s1">Activity </span><span class="s0">implements </span><span class="s1">OnClickListener{ 
+ 
+    </span><span class="s0">private </span><span class="s1">EditText itemName; 
+    </span><span class="s0">private </span><span class="s1">EditText itemPrice; 
+    </span><span class="s0">private </span><span class="s1">String _itemname; 
+    </span><span class="s0">private </span><span class="s1">String _itemprice; 
+    </span><span class="s0">private </span><span class="s1">Button cancelButton; 
+    </span><span class="s0">private </span><span class="s1">Button saveButton; 
+     
+    DatabaseHelper db; 
+     
+    @Override 
+    </span><span class="s0">protected void </span><span class="s1">onCreate(Bundle savedInstanceState) { 
+        </span><span class="s0">super</span><span class="s1">.onCreate(savedInstanceState); 
+        setContentView(R.layout.add_mark); 
+        db = </span><span class="s0">new </span><span class="s1">DatabaseHelper(getApplicationContext()); 
+        </span><span class="s2">//Item Name</span><span class="s1"> 
+        itemName = (EditText) findViewById(R.id.insertItemName); 
+        itemPrice = (EditText) findViewById(R.id.insertItemPrice); 
+        </span><span class="s2">//Save button and cancel buttons</span><span class="s1"> 
+        cancelButton = (Button) findViewById(R.id.cancelbtn); 
+        cancelButton.setOnClickListener(</span><span class="s0">this</span><span class="s1">); 
+        saveButton = (Button) findViewById(R.id.savebtn); 
+        saveButton.setOnClickListener(</span><span class="s0">this</span><span class="s1">); 
+    } 
+ 
+    @Override 
+    </span><span class="s0">public void </span><span class="s1">onClick(View v) { 
+        </span><span class="s2">// TODO Auto-generated method stub</span><span class="s1"> 
+        </span><span class="s0">if</span><span class="s1">(v.getId() == R.id.cancelbtn){ 
+            </span><span class="s2">//IF cancel, return to previous screen</span><span class="s1"> 
+            db.deleteAllItems(); 
+            finish(); 
+        }</span><span class="s0">else if</span><span class="s1">(v.getId() == R.id.savebtn){ 
+              
+            </span><span class="s2">/** 
+             * CRUD Operations 
+             * */</span><span class="s1"> 
+            </span><span class="s2">// Inserting Contacts</span><span class="s1"> 
+            Log.d(</span><span class="s3">&quot;Insert: &quot;</span><span class="s1">, </span><span class="s3">&quot;Inserting ..&quot;</span><span class="s1">);  
+             
+            </span><span class="s2">//Getting variables</span><span class="s1"> 
+            _itemname = itemName.getText().toString(); 
+            _itemprice = itemPrice.getText().toString(); 
+             
+            db.addItem(</span><span class="s0">new </span><span class="s1">MarkItem(_itemname, _itemprice));   
+              
+            </span><span class="s2">// Reading all contacts</span><span class="s1"> 
+            Log.d(</span><span class="s3">&quot;Reading: &quot;</span><span class="s1">, </span><span class="s3">&quot;Reading all items..&quot;</span><span class="s1">);  
+            List&lt;MarkItem&gt; contacts = db.getAllItems();        
+              
+            </span><span class="s0">for </span><span class="s1">(MarkItem cn : contacts) { 
+                String log = </span><span class="s3">&quot;Id: &quot;</span><span class="s1">+cn.getID()+</span><span class="s3">&quot; ,Name: &quot; </span><span class="s1">+ cn.getItemName() + </span><span class="s3">&quot; ,Price: &quot; </span><span class="s1">+ cn.getItemPrice(); 
+                    </span><span class="s2">// Writing Contacts to log</span><span class="s1"> 
+                Log.d(</span><span class="s3">&quot;Name: &quot;</span><span class="s1">, log); 
+            } 
+             
+            Intent intent = </span><span class="s0">new </span><span class="s1">Intent(</span><span class="s0">this</span><span class="s1">,WidgetProvider.</span><span class="s0">class</span><span class="s1">); 
+            intent.setAction(</span><span class="s3">&quot;android.appwidget.action.APPWIDGET_UPDATE&quot;</span><span class="s1">); 
+            </span><span class="s2">// Use an array and EXTRA_APPWIDGET_IDS instead of AppWidgetManager.EXTRA_APPWIDGET_ID,</span><span class="s1"> 
+            </span><span class="s2">// since it seems the onUpdate() is only fired on that:  </span><span class="s1"> 
+            </span><span class="s0">int</span><span class="s1">[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(</span><span class="s0">new </span><span class="s1">ComponentName(getApplication(), WidgetProvider.</span><span class="s0">class</span><span class="s1">)); 
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids); 
+            sendBroadcast(intent); 
+            </span><span class="s2">// Release from the existing UI and go back to the previous UI</span><span class="s1"> 
+            finish(); 
+         
+        } 
+}} 
+</span></pre>
+</body>
+</html>

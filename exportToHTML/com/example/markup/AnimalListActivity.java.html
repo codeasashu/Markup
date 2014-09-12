@@ -1,0 +1,222 @@
+<html>
+<head>
+<title>AnimalListActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { }
+.s2 { color: rgb(128,128,128); font-style: italic; }
+.s3 { color: rgb(0,128,0); font-weight: bold; }
+.s4 { color: rgb(0,0,255); }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+AnimalListActivity.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<span class="s0">package </span><span class="s1">com.example.markup; 
+ 
+</span><span class="s0">import </span><span class="s1">android.app.Activity; 
+</span><span class="s0">import </span><span class="s1">android.content.Context; 
+</span><span class="s0">import </span><span class="s1">android.content.Intent; 
+</span><span class="s0">import </span><span class="s1">android.os.Bundle; 
+</span><span class="s0">import </span><span class="s1">android.util.Log; 
+</span><span class="s0">import </span><span class="s1">android.view.LayoutInflater; 
+</span><span class="s0">import </span><span class="s1">android.view.View; 
+</span><span class="s0">import </span><span class="s1">android.view.View.OnClickListener; 
+</span><span class="s0">import </span><span class="s1">android.view.ViewGroup; 
+</span><span class="s0">import </span><span class="s1">android.widget.AdapterView; 
+</span><span class="s0">import </span><span class="s1">android.widget.AdapterView.OnItemClickListener; 
+</span><span class="s0">import </span><span class="s1">android.widget.ArrayAdapter; 
+</span><span class="s0">import </span><span class="s1">android.widget.ImageButton; 
+</span><span class="s0">import </span><span class="s1">android.widget.ListView; 
+</span><span class="s0">import </span><span class="s1">android.widget.TextView; 
+</span><span class="s0">import </span><span class="s1">android.widget.Toast; 
+ 
+</span><span class="s0">import </span><span class="s1">com.example.markup.helper.DatabaseHelper; 
+</span><span class="s0">import </span><span class="s1">com.example.markup.model.MarkCalender; 
+</span><span class="s0">import </span><span class="s1">com.example.markup.model.MarkItem; 
+ 
+</span><span class="s0">import </span><span class="s1">java.util.ArrayList; 
+</span><span class="s0">import </span><span class="s1">java.util.List; 
+ 
+</span><span class="s0">public class </span><span class="s1">AnimalListActivity </span><span class="s0">extends </span><span class="s1">Activity{ 
+ 
+    </span><span class="s0">private </span><span class="s1">ArrayList&lt;String&gt; animalsNameList,SellerIds,ItemStat; 
+    </span><span class="s0">public static </span><span class="s1">String ITEM_ID; 
+    DatabaseHelper db; 
+     
+    @Override 
+    </span><span class="s0">protected void </span><span class="s1">onCreate(Bundle savedInstanceState) { 
+        </span><span class="s2">// TODO Auto-generated method stub</span><span class="s1"> 
+        </span><span class="s0">super</span><span class="s1">.onCreate(savedInstanceState); 
+        setContentView(R.layout.animal_list); 
+        setActionBar(</span><span class="s3">&quot;Spec&quot;</span><span class="s1">); 
+ 
+        </span><span class="s2">//Add Button Click</span><span class="s1"> 
+         
+        db = </span><span class="s0">new </span><span class="s1">DatabaseHelper(getApplicationContext()); 
+         
+        ListView animalList=(ListView)findViewById(R.id.listViewAnimals); 
+        animalsNameList = </span><span class="s0">new </span><span class="s1">ArrayList&lt;String&gt;(); 
+        SellerIds = </span><span class="s0">new </span><span class="s1">ArrayList&lt;String&gt;(); 
+        ItemStat = </span><span class="s0">new </span><span class="s1">ArrayList&lt;String&gt;(); 
+        getAnimalNames(); 
+         
+        </span><span class="s2">// Create The Adapter with passing ArrayList as 3rd parameter</span><span class="s1"> 
+        ArrayAdapter&lt;?&gt; arrayAdapter =       
+        </span><span class="s0">new </span><span class="s1">PotListAdapter(</span><span class="s0">this</span><span class="s1">,R.layout.animal_list_item, animalsNameList); 
+        </span><span class="s2">// Set The Adapter</span><span class="s1"> 
+        animalList.setAdapter(arrayAdapter);  
+        animalList.setOnItemClickListener(</span><span class="s0">new </span><span class="s1">OnItemClickListener() { 
+ 
+            @Override 
+            </span><span class="s0">public void </span><span class="s1">onItemClick(AdapterView&lt;?&gt; parent, View view, </span><span class="s0">int </span><span class="s1">position, 
+                    </span><span class="s0">long </span><span class="s1">id) { 
+                </span><span class="s2">// TODO Auto-generated method stub</span><span class="s1"> 
+                Toast.makeText(getApplicationContext(), </span><span class="s3">&quot;Listid: &quot;</span><span class="s1">+SellerIds.get(position),   Toast.LENGTH_SHORT).show(); 
+                 
+                </span><span class="s0">int </span><span class="s1">inmid = Integer.parseInt(SellerIds.get(position)); 
+                Intent intent = </span><span class="s0">new </span><span class="s1">Intent(getApplicationContext(), ItemOnSelect.</span><span class="s0">class</span><span class="s1">); 
+                intent.putExtra(ITEM_ID, inmid); 
+                startActivity(intent); 
+                 
+            } 
+ 
+        }); 
+         
+         
+    } 
+     
+     
+    </span><span class="s0">public void </span><span class="s1">removeAtomPayOnClickHandler(View v) { 
+        Object btntag = v.getTag(); 
+        Toast.makeText(getApplicationContext(), </span><span class="s3">&quot;Button Clicked: &quot;</span><span class="s1">+btntag,   Toast.LENGTH_LONG).show(); 
+    } 
+ 
+    </span><span class="s0">void </span><span class="s1">getAnimalNames() 
+    { 
+        List&lt;MarkItem&gt; items = db.getAllItems(); 
+        Log.i(</span><span class="s3">&quot;Info&quot;</span><span class="s1">,</span><span class="s3">&quot;Retrieving item list....&quot;</span><span class="s1">); 
+        </span><span class="s0">for</span><span class="s1">(MarkItem temp: items){ 
+            Log.i(</span><span class="s3">&quot;Info&quot;</span><span class="s1">,</span><span class="s3">&quot;Got ITEM &quot;</span><span class="s1">+ String.valueOf(temp.getID())); 
+            animalsNameList.add(String.valueOf(temp.getItemName())); 
+            SellerIds.add(String.valueOf(temp.getID())); 
+            </span><span class="s0">int </span><span class="s1">itemStatic = db.getItemStat(temp.getID()); 
+            Log.d(</span><span class="s3">&quot;ItemStat before: &quot;</span><span class="s1">, String.valueOf(itemStatic)); 
+            ItemStat.add(String.valueOf(itemStatic)); 
+        } 
+         
+    }  
+     
+    </span><span class="s0">public void </span><span class="s1">setActionBar(String heading) { 
+        </span><span class="s2">// TODO Auto-generated method stub</span><span class="s1"> 
+        setTitle(heading); 
+    } 
+     
+    </span><span class="s0">private void </span><span class="s1">MarkItem(View v, </span><span class="s0">int </span><span class="s1">status) 
+    { 
+        </span><span class="s0">int </span><span class="s1">count = db.getStatItemCount(Integer.parseInt(v.getTag().toString())); 
+            
+        </span><span class="s0">int </span><span class="s1">affected_rows=</span><span class="s4">0</span><span class="s1">; 
+        </span><span class="s0">int </span><span class="s1">insert_id = </span><span class="s4">0</span><span class="s1">; 
+        </span><span class="s0">if</span><span class="s1">(count == </span><span class="s4">0</span><span class="s1">){ 
+            insert_id = (</span><span class="s0">int</span><span class="s1">) db.createStat(</span><span class="s0">new </span><span class="s1">MarkCalender(Integer.parseInt(v.getTag().toString())), status); 
+            Log.d(</span><span class="s3">&quot;Newly inserted id: &quot;</span><span class="s1">, String.valueOf(insert_id)); 
+        }</span><span class="s0">else</span><span class="s1">{ 
+            affected_rows = db.updateStat(</span><span class="s0">new </span><span class="s1">MarkCalender(Integer.parseInt(v.getTag().toString())), status); 
+            Log.d(</span><span class="s3">&quot;No. of affected rows: &quot;</span><span class="s1">, String.valueOf(affected_rows)); 
+        } 
+    }    
+         
+    </span><span class="s0">public class </span><span class="s1">PotListAdapter </span><span class="s0">extends </span><span class="s1">ArrayAdapter&lt;String&gt;{ 
+         
+        </span><span class="s0">private </span><span class="s1">List obj; 
+        </span><span class="s0">public </span><span class="s1">PotListAdapter(Context context, </span><span class="s0">int </span><span class="s1">resource, List objects) { 
+            </span><span class="s0">super</span><span class="s1">(context, resource, objects); 
+            </span><span class="s2">// TODO Auto-generated constructor stub</span><span class="s1"> 
+            </span><span class="s0">this</span><span class="s1">.obj = objects; 
+        } 
+         
+        @Override 
+        </span><span class="s0">public </span><span class="s1">View getView(</span><span class="s0">int </span><span class="s1">position, View convertView, ViewGroup parent) { 
+            </span><span class="s0">final </span><span class="s1">ViewHolder holder; 
+            </span><span class="s0">if</span><span class="s1">(convertView == </span><span class="s0">null</span><span class="s1">){ 
+                LayoutInflater inflater = LayoutInflater.from(AnimalListActivity.</span><span class="s0">this</span><span class="s1">); 
+                convertView = inflater.inflate(R.layout.animal_list_item, parent, </span><span class="s0">false</span><span class="s1">); 
+                holder = </span><span class="s0">new </span><span class="s1">ViewHolder(); 
+ 
+                holder.text = (TextView)convertView.findViewById(R.id.atomPay_value); 
+                holder.Completebutton = (ImageButton)convertView.findViewById(R.id.atomPay_addPay); 
+                holder.InCompletebutton = (ImageButton)convertView.findViewById(R.id.atomPay_removePay); 
+ 
+                convertView.setTag(holder); 
+            }</span><span class="s0">else</span><span class="s1">{ 
+                holder = (ViewHolder) convertView.getTag(); 
+            } 
+             
+            </span><span class="s2">/* 
+            convertView.setOnClickListener(new OnClickListener() { 
+ 
+                @Override 
+                public void onClick(View v) { 
+                    Toast.makeText(getApplicationContext(), &quot;isttt&quot;,   Toast.LENGTH_SHORT).show(); 
+                } 
+            }); 
+            */</span><span class="s1"> 
+            holder.text.setText(animalsNameList.get(position)); 
+            holder.Completebutton.setOnClickListener(</span><span class="s0">new </span><span class="s1">OnClickListener(){ 
+ 
+                </span><span class="s0">public void </span><span class="s1">onClick(View v) { 
+                    </span><span class="s2">// Disable Button</span><span class="s1"> 
+                    v.setEnabled(</span><span class="s0">false</span><span class="s1">); 
+                    holder.InCompletebutton.setEnabled(</span><span class="s0">true</span><span class="s1">); 
+                    </span><span class="s2">// Mark item as received</span><span class="s1"> 
+                    MarkItem(v, </span><span class="s4">1</span><span class="s1">); 
+                    Toast.makeText(getApplicationContext(), </span><span class="s3">&quot;Marked Received&quot;</span><span class="s1">, Toast.LENGTH_SHORT).show(); 
+                } 
+            }); 
+             
+            holder.InCompletebutton.setOnClickListener(</span><span class="s0">new </span><span class="s1">OnClickListener(){ 
+ 
+                </span><span class="s0">public void </span><span class="s1">onClick(View v) { 
+                    </span><span class="s2">// Disable Button</span><span class="s1"> 
+                    v.setEnabled(</span><span class="s0">false</span><span class="s1">); 
+                    holder.Completebutton.setEnabled(</span><span class="s0">true</span><span class="s1">); 
+                    </span><span class="s2">// Mark item as not received</span><span class="s1"> 
+                    MarkItem(v, </span><span class="s4">0</span><span class="s1">); 
+                    Toast.makeText(getApplicationContext(), </span><span class="s3">&quot;Marked Un-Received&quot;</span><span class="s1">, Toast.LENGTH_SHORT).show(); 
+                } 
+            }); 
+             
+            Log.d(</span><span class="s3">&quot;ItemStat after: &quot;</span><span class="s1">, ItemStat.get(position)); 
+             
+            </span><span class="s2">//If item is marked &quot;not received&quot;</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s1">(Integer.parseInt(ItemStat.get(position)) == </span><span class="s4">0</span><span class="s1">){ 
+                holder.InCompletebutton.setEnabled(</span><span class="s0">false</span><span class="s1">); 
+            }</span><span class="s0">else if</span><span class="s1">(Integer.parseInt(ItemStat.get(position)) == </span><span class="s4">1</span><span class="s1">){ 
+                holder.Completebutton.setEnabled(</span><span class="s0">false</span><span class="s1">); 
+            } 
+            holder.Completebutton.setFocusable(</span><span class="s0">false</span><span class="s1">); 
+            holder.InCompletebutton.setFocusable(</span><span class="s0">false</span><span class="s1">); 
+            holder.Completebutton.setTag( SellerIds.get(position) ); 
+            holder.InCompletebutton.setTag( SellerIds.get(position) ); 
+            </span><span class="s0">return </span><span class="s1">convertView; 
+        } 
+ 
+    } 
+ 
+    </span><span class="s0">static class </span><span class="s1">ViewHolder{ 
+        TextView text; 
+        ImageButton Completebutton; 
+        ImageButton InCompletebutton; 
+    } 
+} 
+</span></pre>
+</body>
+</html>

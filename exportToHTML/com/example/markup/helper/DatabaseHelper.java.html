@@ -1,0 +1,393 @@
+<html>
+<head>
+<title>DatabaseHelper.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { }
+.s2 { color: rgb(128,128,128); font-style: italic; }
+.s3 { color: rgb(0,128,0); font-weight: bold; }
+.s4 { color: rgb(0,0,255); }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+DatabaseHelper.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<span class="s0">package </span><span class="s1">com.example.markup.helper; 
+ 
+</span><span class="s0">import </span><span class="s1">com.example.markup.model.MarkCalender; 
+</span><span class="s0">import </span><span class="s1">com.example.markup.model.MarkItem; 
+ 
+</span><span class="s0">import </span><span class="s1">java.text.SimpleDateFormat; 
+</span><span class="s0">import </span><span class="s1">java.util.ArrayList; 
+</span><span class="s0">import </span><span class="s1">java.util.Date; 
+</span><span class="s0">import </span><span class="s1">java.util.List; 
+</span><span class="s0">import </span><span class="s1">java.util.Locale; 
+ 
+</span><span class="s0">import </span><span class="s1">android.content.ContentValues; 
+</span><span class="s0">import </span><span class="s1">android.content.Context; 
+</span><span class="s0">import </span><span class="s1">android.database.Cursor; 
+</span><span class="s0">import </span><span class="s1">android.database.SQLException; 
+</span><span class="s0">import </span><span class="s1">android.database.sqlite.SQLiteDatabase; 
+</span><span class="s0">import </span><span class="s1">android.database.sqlite.SQLiteOpenHelper; 
+</span><span class="s0">import </span><span class="s1">android.util.Log; 
+ 
+</span><span class="s0">public class </span><span class="s1">DatabaseHelper </span><span class="s0">extends </span><span class="s1">SQLiteOpenHelper{ 
+ 
+    </span><span class="s2">// Logcat tag</span><span class="s1"> 
+        </span><span class="s0">private static final </span><span class="s1">String LOG = </span><span class="s3">&quot;DatabaseHelper&quot;</span><span class="s1">; 
+ 
+        </span><span class="s2">// Database Version</span><span class="s1"> 
+        </span><span class="s0">private static final int </span><span class="s1">DATABASE_VERSION = </span><span class="s4">1</span><span class="s1">; 
+ 
+        </span><span class="s2">// Database Name</span><span class="s1"> 
+        </span><span class="s0">private static final </span><span class="s1">String DATABASE_NAME = </span><span class="s3">&quot;MarkupManager&quot;</span><span class="s1">; 
+ 
+        </span><span class="s2">// Table Names</span><span class="s1"> 
+        </span><span class="s0">private static final </span><span class="s1">String TABLE_ITEMS = </span><span class="s3">&quot;items&quot;</span><span class="s1">; 
+        </span><span class="s0">private static final </span><span class="s1">String TABLE_STATS = </span><span class="s3">&quot;stats&quot;</span><span class="s1">; 
+ 
+        </span><span class="s2">// ITEMS Table - column names</span><span class="s1"> 
+        </span><span class="s0">private static final </span><span class="s1">String KEY_ID = </span><span class="s3">&quot;id&quot;</span><span class="s1">; 
+        </span><span class="s0">private static final </span><span class="s1">String KEY_ITEMNAME = </span><span class="s3">&quot;item_name&quot;</span><span class="s1">; 
+        </span><span class="s0">private static final </span><span class="s1">String KEY_ITEMPRICE = </span><span class="s3">&quot;item_price&quot;</span><span class="s1">; 
+        </span><span class="s0">private static final </span><span class="s1">String KEY_ITEMCREATED_AT = </span><span class="s3">&quot;created_at&quot;</span><span class="s1">; 
+ 
+        </span><span class="s2">// STATS Table - column names</span><span class="s1"> 
+        </span><span class="s0">private static final </span><span class="s1">String KEY_STATDATE = </span><span class="s3">&quot;item_date&quot;</span><span class="s1">; 
+        </span><span class="s0">private static final </span><span class="s1">String KEY_ITEMID = </span><span class="s3">&quot;item_id&quot;</span><span class="s1">; 
+        </span><span class="s0">private static final </span><span class="s1">String KEY_ITEMSTATUS = </span><span class="s3">&quot;item_stat&quot;</span><span class="s1">; 
+ 
+ 
+ 
+        </span><span class="s2">// Table Create Statements</span><span class="s1"> 
+        </span><span class="s2">// ITEMS table create statement</span><span class="s1"> 
+        </span><span class="s0">private static final </span><span class="s1">String CREATE_TABLE_ITEMS = </span><span class="s3">&quot;CREATE TABLE &quot;</span><span class="s1"> 
+                + TABLE_ITEMS + </span><span class="s3">&quot;(&quot; </span><span class="s1">+ KEY_ID + </span><span class="s3">&quot; INTEGER PRIMARY KEY,&quot; </span><span class="s1">+ KEY_ITEMNAME 
+                + </span><span class="s3">&quot; TEXT,&quot; </span><span class="s1">+ KEY_ITEMPRICE + </span><span class="s3">&quot; TEXT,&quot; </span><span class="s1">+ KEY_ITEMCREATED_AT 
+                + </span><span class="s3">&quot; DATETIME&quot; </span><span class="s1">+ </span><span class="s3">&quot;)&quot;</span><span class="s1">; 
+ 
+        </span><span class="s2">// STAT table create statement</span><span class="s1"> 
+        </span><span class="s0">private static final </span><span class="s1">String CREATE_TABLE_STATS = </span><span class="s3">&quot;CREATE TABLE &quot; </span><span class="s1">+ TABLE_STATS 
+                + </span><span class="s3">&quot;(&quot; </span><span class="s1">+ KEY_ID + </span><span class="s3">&quot; INTEGER PRIMARY KEY,&quot; </span><span class="s1">+ KEY_STATDATE + </span><span class="s3">&quot; DATETIME,&quot;</span><span class="s1"> 
+                + KEY_ITEMID + </span><span class="s3">&quot; INTEGER,&quot; </span><span class="s1">+ KEY_ITEMSTATUS + </span><span class="s3">&quot; TEXT&quot;</span><span class="s1"> 
+                + </span><span class="s3">&quot;)&quot;</span><span class="s1">; 
+ 
+ 
+        </span><span class="s0">public </span><span class="s1">DatabaseHelper(Context context) { 
+            </span><span class="s0">super</span><span class="s1">(context, DATABASE_NAME, </span><span class="s0">null</span><span class="s1">, DATABASE_VERSION); 
+        } 
+ 
+        @Override 
+        </span><span class="s0">public void </span><span class="s1">onCreate(SQLiteDatabase db) { 
+ 
+            </span><span class="s2">// creating required tables</span><span class="s1"> 
+            db.execSQL(CREATE_TABLE_ITEMS); 
+            db.execSQL(CREATE_TABLE_STATS); 
+        } 
+ 
+        @Override 
+        </span><span class="s0">public void </span><span class="s1">onUpgrade(SQLiteDatabase db, </span><span class="s0">int </span><span class="s1">oldVersion, </span><span class="s0">int </span><span class="s1">newVersion) { 
+            </span><span class="s2">// on upgrade drop older tables</span><span class="s1"> 
+            db.execSQL(</span><span class="s3">&quot;DROP TABLE IF EXISTS &quot; </span><span class="s1">+ CREATE_TABLE_ITEMS); 
+            db.execSQL(</span><span class="s3">&quot;DROP TABLE IF EXISTS &quot; </span><span class="s1">+ CREATE_TABLE_STATS); 
+ 
+            </span><span class="s2">// create new tables</span><span class="s1"> 
+            onCreate(db); 
+        } 
+ 
+        </span><span class="s2">// ------------------------ &quot;ITEMS&quot; table methods ----------------//</span><span class="s1"> 
+ 
+        </span><span class="s2">// Adding new item</span><span class="s1"> 
+        </span><span class="s0">public void </span><span class="s1">addItem(MarkItem markitem) { 
+            SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getWritableDatabase(); 
+      
+            ContentValues values = </span><span class="s0">new </span><span class="s1">ContentValues(); 
+            values.put(KEY_ITEMNAME, markitem.getItemName()); </span><span class="s2">// Item Name</span><span class="s1"> 
+            values.put(KEY_ITEMPRICE, markitem.getItemPrice()); </span><span class="s2">// Item Price</span><span class="s1"> 
+            values.put(KEY_ITEMCREATED_AT, getDateTime()); </span><span class="s2">// Item creation Date</span><span class="s1"> 
+      
+            </span><span class="s2">// Inserting Row</span><span class="s1"> 
+            db.insert(TABLE_ITEMS, </span><span class="s0">null</span><span class="s1">, values); 
+            db.close(); </span><span class="s2">// Closing database connection</span><span class="s1"> 
+        } 
+ 
+        </span><span class="s2">/* 
+         *  Get single item 
+         */</span><span class="s1"> 
+        </span><span class="s0">public </span><span class="s1">MarkItem getItem(</span><span class="s0">long </span><span class="s1">item_id) { 
+            SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getReadableDatabase(); 
+ 
+            String selectQuery = </span><span class="s3">&quot;SELECT  * FROM &quot; </span><span class="s1">+ TABLE_ITEMS + </span><span class="s3">&quot; WHERE &quot;</span><span class="s1"> 
+                    + KEY_ID + </span><span class="s3">&quot; = &quot; </span><span class="s1">+ item_id; 
+ 
+            Log.e(LOG, selectQuery); 
+ 
+            Cursor c = db.rawQuery(selectQuery, </span><span class="s0">null</span><span class="s1">); 
+ 
+            MarkItem td = </span><span class="s0">new </span><span class="s1">MarkItem(); 
+             
+            </span><span class="s0">if</span><span class="s1">(c.moveToFirst()) { </span><span class="s2">//edit</span><span class="s1"> 
+                 
+                td.setID(c.getInt(c.getColumnIndex(KEY_ID))); 
+                td.setName((c.getString(c.getColumnIndex(KEY_ITEMNAME)))); 
+                td.setItemCreatedAt(c.getString(c.getColumnIndex(KEY_ITEMCREATED_AT))); 
+            }</span><span class="s0">else</span><span class="s1">{ 
+                 
+                td = </span><span class="s0">null</span><span class="s1">; 
+            } 
+             
+            </span><span class="s0">return </span><span class="s1">td; 
+        } 
+ 
+        </span><span class="s2">/* 
+         * Get all items 
+         *  
+         */</span><span class="s1"> 
+        </span><span class="s0">public </span><span class="s1">List&lt;MarkItem&gt; getAllItems() { 
+            List&lt;MarkItem&gt; items = </span><span class="s0">new </span><span class="s1">ArrayList&lt;MarkItem&gt;(); 
+            String selectQuery = </span><span class="s3">&quot;SELECT  * FROM &quot; </span><span class="s1">+ TABLE_ITEMS; 
+ 
+            Log.e(LOG, selectQuery); 
+ 
+            SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getReadableDatabase(); 
+            Cursor c = db.rawQuery(selectQuery, </span><span class="s0">null</span><span class="s1">); 
+ 
+            </span><span class="s2">// looping through all rows and adding to list</span><span class="s1"> 
+            </span><span class="s0">if </span><span class="s1">(c.moveToFirst()) { 
+                </span><span class="s0">do </span><span class="s1">{ 
+                    MarkItem td = </span><span class="s0">new </span><span class="s1">MarkItem(); 
+                     
+                    td.setID(Integer.parseInt(c.getString(</span><span class="s4">0</span><span class="s1">))); 
+                    td.setName(c.getString(</span><span class="s4">1</span><span class="s1">)); 
+                    td.setItemCreatedAt(c.getString(</span><span class="s4">2</span><span class="s1">)); 
+                    </span><span class="s2">// adding to todo list</span><span class="s1"> 
+                    items.add(td); 
+                } </span><span class="s0">while </span><span class="s1">(c.moveToNext()); 
+            } 
+ 
+            </span><span class="s0">return </span><span class="s1">items; 
+        } 
+ 
+        </span><span class="s2">/* 
+         * @TODO : getting all items under single date 
+         *  
+         */</span><span class="s1"> 
+        </span><span class="s2">/* 
+        public List&lt;Todo&gt; getAllToDosByTag(String tag_name) { 
+            List&lt;Todo&gt; todos = new ArrayList&lt;Todo&gt;(); 
+ 
+            String selectQuery = &quot;SELECT  * FROM &quot; + TABLE_TODO + &quot; td, &quot; 
+                    + TABLE_TAG + &quot; tg, &quot; + TABLE_TODO_TAG + &quot; tt WHERE tg.&quot; 
+                    + KEY_TAG_NAME + &quot; = '&quot; + tag_name + &quot;'&quot; + &quot; AND tg.&quot; + KEY_ID 
+                    + &quot; = &quot; + &quot;tt.&quot; + KEY_TAG_ID + &quot; AND td.&quot; + KEY_ID + &quot; = &quot; 
+                    + &quot;tt.&quot; + KEY_TODO_ID; 
+ 
+            Log.e(LOG, selectQuery); 
+ 
+            SQLiteDatabase db = this.getReadableDatabase(); 
+            Cursor c = db.rawQuery(selectQuery, null); 
+ 
+            // looping through all rows and adding to list 
+            if (c.moveToFirst()) { 
+                do { 
+                    Todo td = new Todo(); 
+                    td.setId(c.getInt((c.getColumnIndex(KEY_ID)))); 
+                    td.setNote((c.getString(c.getColumnIndex(KEY_TODO)))); 
+                    td.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT))); 
+ 
+                    // adding to todo list 
+                    todos.add(td); 
+                } while (c.moveToNext()); 
+            } 
+ 
+            return todos; 
+        } 
+        */</span><span class="s1"> 
+ 
+        </span><span class="s2">/* 
+         * getting items count 
+         */</span><span class="s1"> 
+        </span><span class="s0">public int </span><span class="s1">getItemsCount() { 
+            String countQuery = </span><span class="s3">&quot;SELECT  * FROM &quot; </span><span class="s1">+ TABLE_ITEMS; 
+            SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getReadableDatabase(); 
+            Cursor cursor = db.rawQuery(countQuery, </span><span class="s0">null</span><span class="s1">); 
+ 
+            </span><span class="s0">int </span><span class="s1">count = cursor.getCount(); 
+            cursor.close(); 
+ 
+            </span><span class="s2">// return count</span><span class="s1"> 
+            </span><span class="s0">return </span><span class="s1">count; 
+        } 
+         
+ 
+        </span><span class="s2">/* 
+         * @TODO: Updating a item 
+         */</span><span class="s1"> 
+        </span><span class="s2">/* 
+        public int updateItem(MarkItem item) { 
+            SQLiteDatabase db = this.getWritableDatabase(); 
+ 
+            ContentValues values = new ContentValues(); 
+            values.put(KEY_ITEMNAME, item.getItemName()); 
+ 
+            // updating row 
+            return db.update(TABLE_ITEMS, values, KEY_ID + &quot; = ?&quot;, 
+                    new String[] { String.valueOf(item.getID()) }); 
+        } 
+        */</span><span class="s1"> 
+ 
+        </span><span class="s2">/* 
+         * Deleting a item 
+         */</span><span class="s1"> 
+        </span><span class="s0">public void </span><span class="s1">deleteItem(</span><span class="s0">long </span><span class="s1">item_id) { 
+            SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getWritableDatabase(); 
+            db.delete(TABLE_ITEMS, KEY_ID + </span><span class="s3">&quot; = ?&quot;</span><span class="s1">, 
+                    </span><span class="s0">new </span><span class="s1">String[] { String.valueOf(item_id) }); 
+        } 
+         
+        </span><span class="s0">public void </span><span class="s1">deleteAllItems() { 
+            SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getWritableDatabase(); 
+            db.execSQL(</span><span class="s3">&quot;delete from &quot;</span><span class="s1">+ TABLE_ITEMS); 
+        } 
+ 
+         
+        </span><span class="s2">// ------------------------ &quot;STATS&quot; table methods ----------------//</span><span class="s1"> 
+ 
+        </span><span class="s2">/* 
+         * Creating STAT 
+         */</span><span class="s1"> 
+        </span><span class="s0">public long </span><span class="s1">createStat(MarkCalender stat, </span><span class="s0">int </span><span class="s1">status) { 
+            SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getWritableDatabase(); 
+ 
+            String item_status = (status == </span><span class="s4">1</span><span class="s1">)?MarkCalender._item_mark_complete:MarkCalender._item_mark_incomplete; 
+             
+            ContentValues values = </span><span class="s0">new </span><span class="s1">ContentValues(); 
+            values.put(KEY_ITEMID, stat.GetItemId()); 
+            values.put(KEY_ITEMSTATUS , item_status); 
+            values.put(KEY_STATDATE, getDate()); 
+ 
+            </span><span class="s2">// insert row</span><span class="s1"> 
+            </span><span class="s0">long </span><span class="s1">insert_id = db.insert(TABLE_STATS, </span><span class="s0">null</span><span class="s1">, values); 
+            </span><span class="s0">return </span><span class="s1">insert_id; 
+        } 
+ 
+        </span><span class="s2">/** 
+         * getting item stat 
+         * */</span><span class="s1"> 
+        </span><span class="s0">public </span><span class="s1">List&lt;MarkCalender&gt; getStatItem(String markcal, </span><span class="s0">long </span><span class="s1">item_id) { 
+            List&lt;MarkCalender&gt; stats = </span><span class="s0">new </span><span class="s1">ArrayList&lt;MarkCalender&gt;(); 
+            String selectQuery = </span><span class="s3">&quot;SELECT  * FROM &quot; </span><span class="s1">+ TABLE_STATS + </span><span class="s3">&quot; WHERE &quot;</span><span class="s1"> 
+                    + KEY_STATDATE  + </span><span class="s3">&quot; = &quot; </span><span class="s1">+ markcal + </span><span class="s3">&quot; AND &quot;</span><span class="s1">  
+                    + KEY_ITEMID + </span><span class="s3">&quot; = &quot; </span><span class="s1">+ item_id; 
+ 
+            Log.e(LOG, selectQuery); 
+ 
+            SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getReadableDatabase(); 
+            Cursor c = db.rawQuery(selectQuery, </span><span class="s0">null</span><span class="s1">); 
+ 
+            </span><span class="s2">// looping through all rows and adding to list</span><span class="s1"> 
+            </span><span class="s0">if </span><span class="s1">(c.moveToFirst()) { 
+                </span><span class="s0">do </span><span class="s1">{ 
+                    MarkCalender t = </span><span class="s0">new </span><span class="s1">MarkCalender(); 
+                    t.setID(c.getInt((c.getColumnIndex(KEY_ID)))); 
+                    t.SetItemId(c.getInt(c.getColumnIndex(KEY_ITEMID))); 
+                    Log.e(</span><span class="s3">&quot;ITEM FOUND. item id: &quot;</span><span class="s1">,String.valueOf(t.GetItemId())); 
+                    </span><span class="s2">// adding to stat list</span><span class="s1"> 
+                    stats.add(t); 
+                } </span><span class="s0">while </span><span class="s1">(c.moveToNext()); 
+            } 
+            </span><span class="s0">return </span><span class="s1">stats; 
+        } 
+ 
+        </span><span class="s2">/* 
+         * Updating a stat 
+         */</span><span class="s1"> 
+        </span><span class="s0">public int </span><span class="s1">updateStat(MarkCalender markcal, </span><span class="s0">int </span><span class="s1">status) { 
+            String date = String.valueOf(getDate()); 
+             
+            List itemsp = getStatItem(date,markcal.GetItemId()); 
+             
+            SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getWritableDatabase(); 
+ 
+            String item_status = String.valueOf(status); 
+    </span><span class="s2">//      String item_status = (status == 1)?MarkCalender._item_mark_complete:MarkCalender._item_mark_incomplete;</span><span class="s1"> 
+             
+            ContentValues values = </span><span class="s0">new </span><span class="s1">ContentValues(); 
+            values.put(KEY_ITEMSTATUS, item_status); 
+            Log.d(</span><span class="s3">&quot;Item ID updating is: &quot;</span><span class="s1">, String.valueOf(markcal.GetItemId())); 
+            Log.d(</span><span class="s3">&quot;Item ID status will be: &quot;</span><span class="s1">, item_status); 
+            </span><span class="s2">// updating row</span><span class="s1"> 
+            </span><span class="s0">return </span><span class="s1">db.update(TABLE_STATS, values, (KEY_ITEMID + </span><span class="s3">&quot; = ? AND &quot; </span><span class="s1">+ KEY_STATDATE + </span><span class="s3">&quot; = &quot;</span><span class="s1">+ </span><span class="s3">&quot;'&quot;</span><span class="s1">+date+</span><span class="s3">&quot;'&quot;</span><span class="s1">), 
+                    </span><span class="s0">new </span><span class="s1">String[] { String.valueOf(markcal.GetItemId()) }); 
+        } 
+         
+         
+        </span><span class="s2">/* 
+         * getting items count (as on current Date) 
+         */</span><span class="s1"> 
+        </span><span class="s0">public int </span><span class="s1">getStatItemCount(</span><span class="s0">int </span><span class="s1">item_id) { 
+            String date = String.valueOf(getDate()); 
+            String countQuery = </span><span class="s3">&quot;SELECT  * FROM &quot; </span><span class="s1">+ TABLE_STATS + </span><span class="s3">&quot; WHERE &quot;</span><span class="s1"> 
+                    + KEY_ITEMID  + </span><span class="s3">&quot; = &quot; </span><span class="s1">+ item_id 
+                    + </span><span class="s3">&quot; AND &quot; </span><span class="s1">+ KEY_STATDATE  + </span><span class="s3">&quot; = &quot; </span><span class="s1">+ </span><span class="s3">&quot;'&quot;</span><span class="s1">+date+</span><span class="s3">&quot;'&quot;</span><span class="s1">; 
+            SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getReadableDatabase(); 
+            Cursor cursor = db.rawQuery(countQuery, </span><span class="s0">null</span><span class="s1">); 
+             
+            </span><span class="s0">int </span><span class="s1">count = cursor.getCount(); 
+            cursor.close(); 
+ 
+            </span><span class="s2">// return count</span><span class="s1"> 
+            </span><span class="s0">return </span><span class="s1">count; 
+        } 
+         
+        </span><span class="s0">public int </span><span class="s1">getItemStat(</span><span class="s0">int </span><span class="s1">item_id) { 
+            </span><span class="s0">int </span><span class="s1">item_stat = -</span><span class="s4">1</span><span class="s1">; 
+            String date = String.valueOf(getDate()); 
+            String countQuery = </span><span class="s3">&quot;SELECT  * FROM &quot; </span><span class="s1">+ TABLE_STATS + </span><span class="s3">&quot; WHERE &quot;</span><span class="s1"> 
+                    + KEY_ITEMID  + </span><span class="s3">&quot; = &quot; </span><span class="s1">+ item_id 
+                    + </span><span class="s3">&quot; AND &quot; </span><span class="s1">+ KEY_STATDATE  + </span><span class="s3">&quot; = &quot; </span><span class="s1">+ </span><span class="s3">&quot;'&quot;</span><span class="s1">+date+</span><span class="s3">&quot;'&quot;</span><span class="s1">; 
+            SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getReadableDatabase(); 
+            Cursor cursor = db.rawQuery(countQuery, </span><span class="s0">null</span><span class="s1">); 
+            </span><span class="s2">// looping through all rows and adding to list</span><span class="s1"> 
+            </span><span class="s0">if </span><span class="s1">(cursor.moveToFirst()) { 
+                </span><span class="s0">do </span><span class="s1">{ 
+                    item_stat = cursor.getInt((cursor.getColumnIndex(KEY_ITEMSTATUS))); 
+                } </span><span class="s0">while </span><span class="s1">(cursor.moveToNext()); 
+            } 
+            cursor.close(); 
+ 
+             
+            </span><span class="s2">// return count</span><span class="s1"> 
+            </span><span class="s0">return </span><span class="s1">item_stat; 
+        } 
+         
+        </span><span class="s2">/** 
+         * get date 
+         * */</span><span class="s1"> 
+        </span><span class="s0">private </span><span class="s1">String getDate() { 
+            SimpleDateFormat dateFormat = </span><span class="s0">new </span><span class="s1">SimpleDateFormat( 
+                    </span><span class="s3">&quot;yyyy-MM-dd&quot;</span><span class="s1">, Locale.getDefault()); 
+            Date date = </span><span class="s0">new </span><span class="s1">Date(); 
+            </span><span class="s0">return </span><span class="s1">dateFormat.format(date); 
+        } 
+ 
+        </span><span class="s2">/** 
+         * get datetime 
+         * */</span><span class="s1"> 
+        </span><span class="s0">private </span><span class="s1">String getDateTime() { 
+            SimpleDateFormat dateFormat = </span><span class="s0">new </span><span class="s1">SimpleDateFormat( 
+                    </span><span class="s3">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="s1">, Locale.getDefault()); 
+            Date date = </span><span class="s0">new </span><span class="s1">Date(); 
+            </span><span class="s0">return </span><span class="s1">dateFormat.format(date); 
+        } 
+} 
+</span></pre>
+</body>
+</html>

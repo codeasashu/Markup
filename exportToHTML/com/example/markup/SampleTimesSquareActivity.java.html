@@ -1,0 +1,220 @@
+<html>
+<head>
+<title>SampleTimesSquareActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { }
+.s2 { color: rgb(0,128,0); font-weight: bold; }
+.s3 { color: rgb(0,0,255); }
+.s4 { color: rgb(128,128,128); font-style: italic; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+SampleTimesSquareActivity.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<span class="s0">package </span><span class="s1">com.example.markup; 
+ 
+</span><span class="s0">import </span><span class="s1">android.app.Activity; 
+</span><span class="s0">import </span><span class="s1">android.app.AlertDialog; 
+</span><span class="s0">import </span><span class="s1">android.content.DialogInterface; 
+</span><span class="s0">import </span><span class="s1">android.content.res.Configuration; 
+</span><span class="s0">import </span><span class="s1">android.os.Bundle; 
+</span><span class="s0">import </span><span class="s1">android.util.Log; 
+</span><span class="s0">import </span><span class="s1">android.view.View; 
+</span><span class="s0">import </span><span class="s1">android.view.View.OnClickListener; 
+</span><span class="s0">import </span><span class="s1">android.widget.Button; 
+</span><span class="s0">import </span><span class="s1">android.widget.Toast; 
+</span><span class="s0">import </span><span class="s1">com.squareup.timessquare.CalendarPickerView; 
+</span><span class="s0">import </span><span class="s1">com.squareup.timessquare.CalendarPickerView.SelectionMode; 
+</span><span class="s0">import </span><span class="s1">java.util.ArrayList; 
+</span><span class="s0">import </span><span class="s1">java.util.Calendar; 
+</span><span class="s0">import </span><span class="s1">java.util.Date; 
+ 
+</span><span class="s0">import static </span><span class="s1">android.widget.Toast.LENGTH_SHORT; 
+ 
+</span><span class="s0">public class </span><span class="s1">SampleTimesSquareActivity </span><span class="s0">extends </span><span class="s1">Activity { 
+  </span><span class="s0">private static final </span><span class="s1">String TAG = </span><span class="s2">&quot;SampleTimesSquareActivity&quot;</span><span class="s1">; 
+  </span><span class="s0">private </span><span class="s1">CalendarPickerView calendar; 
+  </span><span class="s0">private </span><span class="s1">AlertDialog theDialog; 
+  </span><span class="s0">private </span><span class="s1">CalendarPickerView dialogView; 
+ 
+  @Override 
+  </span><span class="s0">protected void </span><span class="s1">onCreate(Bundle savedInstanceState) { 
+    </span><span class="s0">super</span><span class="s1">.onCreate(savedInstanceState); 
+    setContentView(R.layout.sample_calendar_picker); 
+ 
+    </span><span class="s0">final </span><span class="s1">Calendar nextYear = Calendar.getInstance(); 
+    nextYear.add(Calendar.YEAR, </span><span class="s3">1</span><span class="s1">); 
+ 
+    </span><span class="s0">final </span><span class="s1">Calendar lastYear = Calendar.getInstance(); 
+    lastYear.add(Calendar.YEAR, -</span><span class="s3">1</span><span class="s1">); 
+ 
+    calendar = (CalendarPickerView) findViewById(R.id.calendar_view); 
+    calendar.init(lastYear.getTime(), nextYear.getTime()) </span><span class="s4">//</span><span class="s1"> 
+        .inMode(SelectionMode.SINGLE) </span><span class="s4">//</span><span class="s1"> 
+        .withSelectedDate(</span><span class="s0">new </span><span class="s1">Date()); 
+ 
+    </span><span class="s0">final </span><span class="s1">Button single = (Button) findViewById(R.id.button_single); 
+    </span><span class="s0">final </span><span class="s1">Button multi = (Button) findViewById(R.id.button_multi); 
+    </span><span class="s0">final </span><span class="s1">Button range = (Button) findViewById(R.id.button_range); 
+    </span><span class="s0">final </span><span class="s1">Button displayOnly = (Button) findViewById(R.id.button_display_only); 
+    </span><span class="s0">final </span><span class="s1">Button dialog = (Button) findViewById(R.id.button_dialog); 
+    </span><span class="s0">final </span><span class="s1">Button customized = (Button) findViewById(R.id.button_customized); 
+    single.setOnClickListener(</span><span class="s0">new </span><span class="s1">OnClickListener() { 
+      @Override 
+      </span><span class="s0">public void </span><span class="s1">onClick(View v) { 
+        single.setEnabled(</span><span class="s0">false</span><span class="s1">); 
+        multi.setEnabled(</span><span class="s0">true</span><span class="s1">); 
+        range.setEnabled(</span><span class="s0">true</span><span class="s1">); 
+        displayOnly.setEnabled(</span><span class="s0">true</span><span class="s1">); 
+ 
+        calendar.init(lastYear.getTime(), nextYear.getTime()) </span><span class="s4">//</span><span class="s1"> 
+            .inMode(SelectionMode.SINGLE) </span><span class="s4">//</span><span class="s1"> 
+            .withSelectedDate(</span><span class="s0">new </span><span class="s1">Date()); 
+      } 
+    }); 
+ 
+    multi.setOnClickListener(</span><span class="s0">new </span><span class="s1">OnClickListener() { 
+      @Override 
+      </span><span class="s0">public void </span><span class="s1">onClick(View v) { 
+        single.setEnabled(</span><span class="s0">true</span><span class="s1">); 
+        multi.setEnabled(</span><span class="s0">false</span><span class="s1">); 
+        range.setEnabled(</span><span class="s0">true</span><span class="s1">); 
+        displayOnly.setEnabled(</span><span class="s0">true</span><span class="s1">); 
+ 
+        Calendar today = Calendar.getInstance(); 
+        ArrayList&lt;Date&gt; dates = </span><span class="s0">new </span><span class="s1">ArrayList&lt;Date&gt;(); 
+        </span><span class="s0">for </span><span class="s1">(</span><span class="s0">int </span><span class="s1">i = </span><span class="s3">0</span><span class="s1">; i &lt; </span><span class="s3">5</span><span class="s1">; i++) { 
+          today.add(Calendar.DAY_OF_MONTH, </span><span class="s3">3</span><span class="s1">); 
+          dates.add(today.getTime()); 
+        } 
+        calendar.init(</span><span class="s0">new </span><span class="s1">Date(), nextYear.getTime()) </span><span class="s4">//</span><span class="s1"> 
+            .inMode(SelectionMode.MULTIPLE) </span><span class="s4">//</span><span class="s1"> 
+            .withSelectedDates(dates); 
+      } 
+    }); 
+ 
+    range.setOnClickListener(</span><span class="s0">new </span><span class="s1">OnClickListener() { 
+      @Override 
+      </span><span class="s0">public void </span><span class="s1">onClick(View v) { 
+        single.setEnabled(</span><span class="s0">true</span><span class="s1">); 
+        multi.setEnabled(</span><span class="s0">true</span><span class="s1">); 
+        range.setEnabled(</span><span class="s0">false</span><span class="s1">); 
+        displayOnly.setEnabled(</span><span class="s0">true</span><span class="s1">); 
+ 
+        Calendar today = Calendar.getInstance(); 
+        ArrayList&lt;Date&gt; dates = </span><span class="s0">new </span><span class="s1">ArrayList&lt;Date&gt;(); 
+        today.add(Calendar.DATE, </span><span class="s3">3</span><span class="s1">); 
+        dates.add(today.getTime()); 
+        today.add(Calendar.DATE, </span><span class="s3">5</span><span class="s1">); 
+        dates.add(today.getTime()); 
+        calendar.init(</span><span class="s0">new </span><span class="s1">Date(), nextYear.getTime()) </span><span class="s4">//</span><span class="s1"> 
+            .inMode(SelectionMode.RANGE) </span><span class="s4">//</span><span class="s1"> 
+            .withSelectedDates(dates); 
+      } 
+    }); 
+ 
+    displayOnly.setOnClickListener(</span><span class="s0">new </span><span class="s1">OnClickListener() { 
+      @Override 
+      </span><span class="s0">public void </span><span class="s1">onClick(View v) { 
+        single.setEnabled(</span><span class="s0">true</span><span class="s1">); 
+        multi.setEnabled(</span><span class="s0">true</span><span class="s1">); 
+        range.setEnabled(</span><span class="s0">true</span><span class="s1">); 
+        displayOnly.setEnabled(</span><span class="s0">false</span><span class="s1">); 
+ 
+        calendar.init(</span><span class="s0">new </span><span class="s1">Date(), nextYear.getTime()) </span><span class="s4">//</span><span class="s1"> 
+            .inMode(SelectionMode.SINGLE) </span><span class="s4">//</span><span class="s1"> 
+            .withSelectedDate(</span><span class="s0">new </span><span class="s1">Date()) 
+            .displayOnly(); 
+      } 
+    }); 
+ 
+    dialog.setOnClickListener(</span><span class="s0">new </span><span class="s1">OnClickListener() { 
+      @Override </span><span class="s0">public void </span><span class="s1">onClick(View view) { 
+        dialogView = (CalendarPickerView) getLayoutInflater().inflate(R.layout.dialog, </span><span class="s0">null</span><span class="s1">, </span><span class="s0">false</span><span class="s1">); 
+        dialogView.init(lastYear.getTime(), nextYear.getTime()) </span><span class="s4">//</span><span class="s1"> 
+            .withSelectedDate(</span><span class="s0">new </span><span class="s1">Date()); 
+        theDialog = 
+            </span><span class="s0">new </span><span class="s1">AlertDialog.Builder(SampleTimesSquareActivity.</span><span class="s0">this</span><span class="s1">).setTitle(</span><span class="s2">&quot;I'm a dialog!&quot;</span><span class="s1">) 
+                .setView(dialogView) 
+                .setNeutralButton(</span><span class="s2">&quot;Dismiss&quot;</span><span class="s1">, </span><span class="s0">new </span><span class="s1">DialogInterface.OnClickListener() { 
+                  @Override </span><span class="s0">public void </span><span class="s1">onClick(DialogInterface dialogInterface, </span><span class="s0">int </span><span class="s1">i) { 
+                    dialogInterface.dismiss(); 
+                  } 
+                }) 
+                .create(); 
+        theDialog.setOnShowListener(</span><span class="s0">new </span><span class="s1">DialogInterface.OnShowListener() { 
+          @Override 
+          </span><span class="s0">public void </span><span class="s1">onShow(DialogInterface dialogInterface) { 
+            Log.d(TAG, </span><span class="s2">&quot;onShow: fix the dimens!&quot;</span><span class="s1">); 
+            dialogView.fixDialogDimens(); 
+          } 
+        }); 
+        theDialog.show(); 
+      } 
+    }); 
+ 
+    customized.setOnClickListener(</span><span class="s0">new </span><span class="s1">OnClickListener() { 
+      @Override 
+      </span><span class="s0">public void </span><span class="s1">onClick(View view) { 
+        dialogView = (CalendarPickerView) getLayoutInflater() </span><span class="s4">//</span><span class="s1"> 
+            .inflate(R.layout.dialog_customized, </span><span class="s0">null</span><span class="s1">, </span><span class="s0">false</span><span class="s1">); 
+        dialogView.init(lastYear.getTime(), nextYear.getTime()).withSelectedDate(</span><span class="s0">new </span><span class="s1">Date()); 
+        theDialog = 
+            </span><span class="s0">new </span><span class="s1">AlertDialog.Builder(SampleTimesSquareActivity.</span><span class="s0">this</span><span class="s1">).setTitle(</span><span class="s2">&quot;Pimp my calendar !&quot;</span><span class="s1">) 
+                .setView(dialogView) 
+                .setNeutralButton(</span><span class="s2">&quot;Dismiss&quot;</span><span class="s1">, </span><span class="s0">new </span><span class="s1">DialogInterface.OnClickListener() { 
+                  @Override 
+                  </span><span class="s0">public void </span><span class="s1">onClick(DialogInterface dialogInterface, </span><span class="s0">int </span><span class="s1">i) { 
+                    dialogInterface.dismiss(); 
+                  } 
+                }).create(); 
+        theDialog.setOnShowListener(</span><span class="s0">new </span><span class="s1">DialogInterface.OnShowListener() { 
+          @Override 
+          </span><span class="s0">public void </span><span class="s1">onShow(DialogInterface dialogInterface) { 
+            Log.d(TAG, </span><span class="s2">&quot;onShow: fix the dimens!&quot;</span><span class="s1">); 
+            dialogView.fixDialogDimens(); 
+          } 
+        }); 
+        theDialog.show(); 
+      } 
+    }); 
+ 
+    findViewById(R.id.done_button).setOnClickListener(</span><span class="s0">new </span><span class="s1">OnClickListener() { 
+      @Override 
+      </span><span class="s0">public void </span><span class="s1">onClick(View view) { 
+        Log.d(TAG, </span><span class="s2">&quot;Selected time in millis: &quot; </span><span class="s1">+ calendar.getSelectedDate().getTime()); 
+        String toast = </span><span class="s2">&quot;Selected: &quot; </span><span class="s1">+ calendar.getSelectedDate().getTime(); 
+        Toast.makeText(SampleTimesSquareActivity.</span><span class="s0">this</span><span class="s1">, toast, LENGTH_SHORT).show(); 
+      } 
+    }); 
+  } 
+ 
+  @Override </span><span class="s0">public void </span><span class="s1">onConfigurationChanged(Configuration newConfig) { 
+    </span><span class="s0">boolean </span><span class="s1">applyFixes = theDialog != </span><span class="s0">null </span><span class="s1">&amp;&amp; theDialog.isShowing(); 
+    </span><span class="s0">if </span><span class="s1">(applyFixes) { 
+      Log.d(TAG, </span><span class="s2">&quot;Config change: unfix the dimens so I'll get remeasured!&quot;</span><span class="s1">); 
+      dialogView.unfixDialogDimens(); 
+    } 
+    </span><span class="s0">super</span><span class="s1">.onConfigurationChanged(newConfig); 
+    </span><span class="s0">if </span><span class="s1">(applyFixes) { 
+      dialogView.post(</span><span class="s0">new </span><span class="s1">Runnable() { 
+        @Override </span><span class="s0">public void </span><span class="s1">run() { 
+          Log.d(TAG, </span><span class="s2">&quot;Config change done: re-fix the dimens!&quot;</span><span class="s1">); 
+          dialogView.fixDialogDimens(); 
+        } 
+      }); 
+    } 
+  } 
+} 
+ 
+</span></pre>
+</body>
+</html>
