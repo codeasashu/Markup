@@ -3,6 +3,7 @@ package com.example.markup;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,12 +23,17 @@ import com.example.markup.helper.DatabaseHelper;
 import com.example.markup.model.MarkCalender;
 import com.example.markup.model.MarkItem;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class AnimalListActivity extends Activity{
 
 	private ArrayList<String> animalsNameList,SellerIds,ItemStat;
+    private HashMap<String, Integer> itemMapper;
 	public static String ITEM_ID;
 	DatabaseHelper db;
 	
@@ -50,12 +56,14 @@ public class AnimalListActivity extends Activity{
             }
         });
 
+
         db = new DatabaseHelper(getApplicationContext());
 
         ListView animalList = (ListView) findViewById(R.id.listViewAnimals);
         animalsNameList = new ArrayList<String>();
         SellerIds = new ArrayList<String>();
         ItemStat = new ArrayList<String>();
+        itemMapper  = new HashMap<String, Integer>();
         getAnimalNames();
 
         // Create The Adapter with passing ArrayList as 3rd parameter
@@ -99,6 +107,8 @@ public class AnimalListActivity extends Activity{
 			animalsNameList.add(String.valueOf(temp.getItemName()));
 			SellerIds.add(String.valueOf(temp.getID()));
 			int itemStatic = db.getItemStat(temp.getID());
+            itemMapper.put(String.valueOf(temp.getID()),itemStatic);
+
 			Log.d("ItemStat before: ", String.valueOf(itemStatic));
 			ItemStat.add(String.valueOf(itemStatic));
 		}
@@ -109,7 +119,19 @@ public class AnimalListActivity extends Activity{
 	    // TODO Auto-generated method stub
 		setTitle(heading);
 	}
-	
+
+    private void RemoveItem(int itemid){
+        String date = String.valueOf(getDate());
+        db.deleteStatOn(itemid,date);
+    }
+
+    private String getDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd", Locale.getDefault());
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
+
 	private void MarkItem(View v, int status)
 	{
 		int count = db.getStatItemCount(Integer.parseInt(v.getTag().toString()));
@@ -165,23 +187,53 @@ public class AnimalListActivity extends Activity{
 
                 public void onClick(View v) {
                 	// Disable Button
-                	v.setEnabled(false);
-                	holder.InCompletebutton.setEnabled(true);
-                	// Mark item as received
-                	MarkItem(v, 1);
-                	Toast.makeText(getApplicationContext(), "Marked Received", Toast.LENGTH_SHORT).show();
+                //	v.setEnabled(false);
+                    String item_id = v.getTag().toString();
+                    String status = "";
+                    if(itemMapper.containsKey(item_id)){
+                        int stat = itemMapper.get(item_id);
+                        if(stat == 1){
+                            // Mark item as un-received
+                            MarkItem(v, 0);
+                            v.setBackgroundColor(Color.YELLOW);
+                            itemMapper.put(item_id,0);
+                            status = "Marked Received";
+                            Toast.makeText(getApplicationContext(), "Marked Un-Received", Toast.LENGTH_SHORT).show();
+                        }else if(stat == 0){
+                            // Remove Item
+                            RemoveItem(Integer.valueOf(item_id));
+                            v.setBackgroundColor(0x00000000);
+                            itemMapper.remove(item_id);
+                            status = "Reset Item";
+                            Toast.makeText(getApplicationContext(), "Reset Item", Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        // Mark item as received
+                        MarkItem(v, 1);
+                        v.setBackgroundColor(Color.BLUE);
+                        itemMapper.put(item_id,1);
+                        status = "Marked Received";
+                        Toast.makeText(getApplicationContext(), "Marked Received", Toast.LENGTH_SHORT).show();
+                    }
+                //	holder.InCompletebutton.setEnabled(true);
+
+
                    }
         	});
             
             holder.InCompletebutton.setOnClickListener(new OnClickListener(){
 
                 public void onClick(View v) {
+                    String itemid = v.getTag().toString();
+                    Intent intent = new Intent(getApplicationContext(), EditActivity.class); //Show Another Calendar
+                    intent.putExtra(ITEM_ID, Integer.valueOf(itemid));
+                    startActivity(intent);
                 	// Disable Button
-                	v.setEnabled(false);
-                	holder.Completebutton.setEnabled(true);
+                //	v.setEnabled(false);
+                //	holder.Completebutton.setEnabled(true);
                 	// Mark item as not received
-                	MarkItem(v, 0);
-                	Toast.makeText(getApplicationContext(), "Marked Un-Received", Toast.LENGTH_SHORT).show();
+               // 	MarkItem(v, 0);
+                //	Toast.makeText(getApplicationContext(), "Marked Un-Received", Toast.LENGTH_SHORT).show();
                    }
         	});
             
@@ -189,9 +241,13 @@ public class AnimalListActivity extends Activity{
             
             //If item is marked "not received"
             if(Integer.parseInt(ItemStat.get(position)) == 0){
-            	holder.InCompletebutton.setEnabled(false);
+            //	holder.InCompletebutton.setEnabled(false);
+            	holder.InCompletebutton.setBackgroundColor(Color.YELLOW);
+            	holder.InCompletebutton.setClickable(false);
             }else if(Integer.parseInt(ItemStat.get(position)) == 1){
-            	holder.Completebutton.setEnabled(false);
+            //	holder.Completebutton.setEnabled(false);
+            	holder.Completebutton.setBackgroundColor(Color.BLUE);
+                holder.Completebutton.setClickable(false);
             }
             holder.Completebutton.setFocusable(false);
             holder.InCompletebutton.setFocusable(false);
