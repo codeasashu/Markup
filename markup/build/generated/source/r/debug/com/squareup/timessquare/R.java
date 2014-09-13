@@ -46,8 +46,8 @@ public final class R {
 		public static final int calendar_bg_selector = 0x7f020009;
 	}
 	public static final class id {
-		public static final int calendar_grid = 0x7f0a001a;
-		public static final int title = 0x7f0a0019;
+		public static final int calendar_grid = 0x7f0a001d;
+		public static final int title = 0x7f0a001c;
 	}
 	public static final class layout {
 		public static final int month = 0x7f03000b;

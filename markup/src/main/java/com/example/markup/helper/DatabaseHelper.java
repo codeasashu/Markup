@@ -30,6 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 		// Table Names
 		private static final String TABLE_ITEMS = "items";
 		private static final String TABLE_STATS = "stats";
+		private static final String TABLE_OPTIONS = "options";
 
 		// ITEMS Table - column names
 		private static final String KEY_ID = "id";
@@ -41,6 +42,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 		private static final String KEY_STATDATE = "item_date";
 		private static final String KEY_ITEMID = "item_id";
 		private static final String KEY_ITEMSTATUS = "item_stat";
+
+        // OPTIONS Table - coun
+        private static final String KEY_FREEZE = "item_freeze";
 
 
 
@@ -57,6 +61,11 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 				+ KEY_ITEMID + " INTEGER," + KEY_ITEMSTATUS + " TEXT"
 				+ ")";
 
+        // STAT table create statement
+        private static final String CREATE_TABLE_OPTIONS = "CREATE TABLE " + TABLE_OPTIONS
+            + "(" + KEY_ID + " INTEGER PRIMARY KEY,"+ KEY_ITEMID + " INTEGER,"
+            + KEY_FREEZE + " TEXT"+ ")";
+
 
 		public DatabaseHelper(Context context) {
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -68,6 +77,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 			// creating required tables
 			db.execSQL(CREATE_TABLE_ITEMS);
 			db.execSQL(CREATE_TABLE_STATS);
+            db.execSQL(CREATE_TABLE_OPTIONS);
 		}
 
 		@Override
@@ -75,6 +85,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 			// on upgrade drop older tables
 			db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_ITEMS);
 			db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_STATS);
+			db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_OPTIONS);
 
 			// create new tables
 			onCreate(db);
@@ -214,6 +225,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
             ContentValues values = new ContentValues();
             values.put(KEY_ITEMNAME, item.getItemName());
+            values.put(KEY_ITEMPRICE,item.getItemPrice());
 
             // updating row
             return db.update(TABLE_ITEMS, values, KEY_ID + " = ?",
@@ -251,6 +263,64 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 			db.execSQL("delete from "+ TABLE_ITEMS);
 		}
 
+    // ------------- OPTIONS=--------------//
+    public int getItemOptionsCount(int itemid){
+
+        String countQuery = "SELECT  * FROM " + TABLE_OPTIONS + " WHERE "
+                + KEY_ITEMID  + " = " + itemid;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+
+        int count = cursor.getCount();
+        cursor.close();
+
+        // return count
+        return count;
+    }
+
+    public String[] getItemOptions(int itemid){
+        String[] options = {};
+        String selectQuery = "SELECT  * FROM " + TABLE_OPTIONS + " WHERE "
+                + KEY_ITEMID + " = " + itemid;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                MarkCalender t = new MarkCalender();
+                t.setID(c.getInt((c.getColumnIndex(KEY_ID))));
+                t.SetItemId(c.getInt(c.getColumnIndex(KEY_ITEMID)));
+                String option = c.getString(c.getColumnIndex(KEY_FREEZE));
+                options = option.split(",");
+            } while (c.moveToNext());
+        }
+        return options;
+    }
+
+    public int updateOption(int itemid, String option) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_FREEZE,option);
+
+        // updating row
+        return db.update(TABLE_OPTIONS, values, KEY_ITEMID + " = ?",
+                new String[] { String.valueOf(itemid) });
+    }
+
+    public long addOption(int itemid, String options) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_ITEMID, itemid);
+        values.put(KEY_FREEZE , options);
+        // insert row
+        long insert_id = db.insert(TABLE_OPTIONS, null, values);
+        return insert_id;
+    }
 		
 		// ------------------------ "STATS" table methods ----------------//
 

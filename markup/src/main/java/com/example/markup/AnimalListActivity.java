@@ -249,8 +249,9 @@ public class AnimalListActivity extends Activity{
             	holder.Completebutton.setBackgroundColor(Color.BLUE);
                 holder.Completebutton.setClickable(false);
             }
-            holder.Completebutton.setFocusable(false);
-            holder.InCompletebutton.setFocusable(false);
+
+       //     holder.Completebutton.setFocusable(false);
+        //    holder.InCompletebutton.setFocusable(false);
             holder.Completebutton.setTag( SellerIds.get(position) );
             holder.InCompletebutton.setTag( SellerIds.get(position) );
             return convertView;
